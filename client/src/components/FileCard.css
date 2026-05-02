@@ -1,79 +1,87 @@
-/* FileCard.css */
+/* FileCard.css — v2 Corporate Clean */
 
 .file-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 
 .file-card:hover {
-  border-color: #3a4044;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
-/* Top section: icon + name */
+/* ── Top row ── */
 .file-top {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
-.file-icon {
-  font-size: 28px;
-  line-height: 1;
+.file-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.file-info {
-  flex: 1;
-  min-width: 0; /* allow text truncation */
-}
+.file-info { flex: 1; min-width: 0; }
 
 .file-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .file-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .file-size {
-  font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-muted);
 }
 
-/* Date */
+/* ── Date ── */
 .file-date {
-  font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-muted);
-  letter-spacing: 0.04em;
 }
 
-/* Action buttons row */
+/* ── Divider ── */
+.file-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* ── Actions ── */
 .file-actions {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
+  gap: 6px;
 }
 
 .file-actions .btn {
   flex: 1;
-  justify-content: center;
+  font-size: 12px;
+  padding: 6px 10px;
 }

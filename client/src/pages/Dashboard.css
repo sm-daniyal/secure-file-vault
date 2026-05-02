@@ -1,116 +1,154 @@
-/* Dashboard.css */
+/* Dashboard.css — v2 Corporate Clean */
 
 .dashboard-layout {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(61, 255, 160, 0.04) 0%, transparent 60%),
-    var(--bg);
+  background: var(--bg);
 }
 
 .dashboard-main {
-  padding-top: 32px;
-  padding-bottom: 64px;
+  padding-top: 28px;
+  padding-bottom: 60px;
 }
 
-/* Header */
+/* ── Header ── */
 .dash-header {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .dash-title {
-  font-size: 28px;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.03em;
 }
 
-.accent-prefix {
-  color: var(--accent);
-}
-
-.dash-subtitle {
-  font-family: var(--font-mono);
-  font-size: 12px;
+.dash-meta {
+  font-size: 13px;
   color: var(--text-muted);
-  margin-top: 4px;
-  letter-spacing: 0.06em;
+  margin-top: 2px;
+  font-weight: 400;
 }
 
-/* Search */
-.search-bar {
+/* ── Stat pills ── */
+.dash-stats {
   display: flex;
-  align-items: center;
-  background: var(--bg-card);
+  gap: 8px;
+}
+
+.stat-pill {
+  background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0 14px;
-  margin-bottom: 24px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-.search-bar:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+.stat-pill span {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
-.search-icon {
-  font-size: 18px;
+/* ── Search ── */
+.search-wrap {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-icon-left {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--text-muted);
-  margin-right: 10px;
-  user-select: none;
+  font-size: 14px;
+  pointer-events: none;
 }
 
 .search-input {
-  background: none;
-  border: none;
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   color: var(--text-primary);
-  flex: 1;
-  font-family: var(--font-body);
-  font-size: 15px;
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 9px 36px 9px 36px;
   outline: none;
-  padding: 11px 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
 .search-input::placeholder { color: var(--text-muted); }
 
 .search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   font-size: 12px;
-  padding: 4px;
-  transition: color 0.2s;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color 0.15s;
 }
-.search-clear:hover { color: var(--text-primary); }
 
-/* File grid */
+.search-clear:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* ── File grid ── */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
 }
 
-/* Empty / loading states */
+/* ── Empty / Loading states ── */
 .state-box {
   text-align: center;
-  padding: 64px 24px;
+  padding: 60px 24px;
   color: var(--text-muted);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 13px;
+  gap: 10px;
 }
 
 .state-icon {
-  font-size: 40px;
-  filter: grayscale(0.5);
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.state-box p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ── Section divider ── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
 }
 
 @media (max-width: 600px) {
-  .dash-title { font-size: 22px; }
+  .dash-title { font-size: 18px; }
+  .dash-stats { display: none; }
   .file-grid { grid-template-columns: 1fr; }
 }

@@ -1,12 +1,9 @@
-// ============================================================
-// components/UploadZone.jsx — Drag-and-drop file uploader
-// ============================================================
+// components/UploadZone.jsx — v2 Corporate Clean
 
 import { useState, useRef } from "react";
 import api from "../api";
 import "./UploadZone.css";
 
-// Allowed extensions shown in the UI hint
 const HINT = "PDF, Images, Word, Excel, ZIP, MP4 — max 10 MB";
 
 const UploadZone = ({ onUploadSuccess, onError }) => {
@@ -19,18 +16,16 @@ const UploadZone = ({ onUploadSuccess, onError }) => {
     if (!file) return;
     setUploading(true);
     setProgress(0);
-    onError(""); // clear any previous error
+    onError("");
 
     const formData = new FormData();
-    formData.append("file", file); // key must match upload.single("file") in multer
+    formData.append("file", file);
 
     try {
       await api.post("/files/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (e) => {
-          // Show upload progress percentage
-          const pct = Math.round((e.loaded * 100) / e.total);
-          setProgress(pct);
+          setProgress(Math.round((e.loaded * 100) / e.total));
         },
       });
       onUploadSuccess();
@@ -39,19 +34,16 @@ const UploadZone = ({ onUploadSuccess, onError }) => {
     } finally {
       setUploading(false);
       setProgress(0);
-      // Reset file input so the same file can be re-uploaded if needed
       if (inputRef.current) inputRef.current.value = "";
     }
   };
 
-  // Drag events
   const onDragOver = (e) => { e.preventDefault(); setDragging(true); };
   const onDragLeave = () => setDragging(false);
   const onDrop = (e) => {
     e.preventDefault();
     setDragging(false);
-    const file = e.dataTransfer.files[0];
-    upload(file);
+    upload(e.dataTransfer.files[0]);
   };
 
   return (
@@ -65,7 +57,6 @@ const UploadZone = ({ onUploadSuccess, onError }) => {
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && inputRef.current?.click()}
     >
-      {/* Hidden real file input */}
       <input
         ref={inputRef}
         type="file"
@@ -78,13 +69,13 @@ const UploadZone = ({ onUploadSuccess, onError }) => {
           <div className="upload-bar-track">
             <div className="upload-bar-fill" style={{ width: `${progress}%` }} />
           </div>
-          <p className="upload-pct">{progress}% uploading…</p>
+          <p className="upload-pct">Uploading… {progress}%</p>
         </div>
       ) : (
         <>
-          <span className="upload-icon">↑</span>
+          <div className="upload-icon-box">⬆</div>
           <p className="upload-text">
-            <strong>Drop a file here</strong> or click to browse
+            <strong>Click to upload</strong> or drag and drop a file
           </p>
           <p className="upload-hint">{HINT}</p>
         </>

@@ -1,6 +1,4 @@
-// ============================================================
-// pages/Dashboard.jsx — Main file management dashboard
-// ============================================================
+// pages/Dashboard.jsx — v2 Corporate Clean
 
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -19,12 +17,13 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Fetch files from the backend
   const fetchFiles = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const { data } = await api.get(`/files${search ? `?search=${encodeURIComponent(search)}` : ""}`);
+      const { data } = await api.get(
+        `/files${search ? `?search=${encodeURIComponent(search)}` : ""}`
+      );
       setFiles(data);
     } catch (err) {
       setError("Failed to load files. Is the server running?");
@@ -33,24 +32,21 @@ const Dashboard = () => {
     }
   }, [search]);
 
-  // Re-fetch whenever search changes (with debounce)
   useEffect(() => {
-    const timer = setTimeout(fetchFiles, 300); // wait 300ms after typing
+    const timer = setTimeout(fetchFiles, 300);
     return () => clearTimeout(timer);
   }, [fetchFiles]);
 
   const showSuccess = (msg) => {
     setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(""), 3000); // auto-clear after 3s
+    setTimeout(() => setSuccessMsg(""), 3000);
   };
 
-  // Called after a successful upload
   const handleUploadSuccess = () => {
-    showSuccess("File uploaded successfully!");
+    showSuccess("File uploaded successfully.");
     fetchFiles();
   };
 
-  // Called when a file card triggers a delete
   const handleDelete = async (fileId) => {
     if (!window.confirm("Delete this file permanently?")) return;
     try {
@@ -62,13 +58,11 @@ const Dashboard = () => {
     }
   };
 
-  // Download: redirect the browser to the protected download endpoint
   const handleDownload = async (fileId, originalName) => {
     try {
       const response = await api.get(`/files/download/${fileId}`, {
-        responseType: "blob", // receive raw binary
+        responseType: "blob",
       });
-      // Create a temporary link and click it to trigger the browser download dialog
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -82,57 +76,76 @@ const Dashboard = () => {
     }
   };
 
+  // Calculate total storage used
+  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+  const formatSize = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   return (
     <div className="dashboard-layout">
       <Navbar username={user?.username} />
 
       <main className="dashboard-main container">
-        {/* Welcome header */}
+
+        {/* Header */}
         <div className="dash-header fade-in">
           <div>
-            <h2 className="dash-title">
-              <span className="accent-prefix">$ </span>vault
-            </h2>
-            <p className="dash-subtitle">
-              {files.length} file{files.length !== 1 ? "s" : ""} stored securely
+            <h2 className="dash-title">My Files</h2>
+            <p className="dash-meta">
+              {loading ? "Loading…" : `${files.length} file${files.length !== 1 ? "s" : ""} · ${formatSize(totalSize)} used`}
             </p>
+          </div>
+          <div className="dash-stats">
+            <div className="stat-pill"><span>{files.length}</span> files</div>
+            <div className="stat-pill"><span>{formatSize(totalSize)}</span> stored</div>
           </div>
         </div>
 
         {/* Notifications */}
-        {error && <div className="alert alert-error fade-in">{error}</div>}
+        {error      && <div className="alert alert-error fade-in">{error}</div>}
         {successMsg && <div className="alert alert-success fade-in">{successMsg}</div>}
 
         {/* Upload zone */}
         <UploadZone onUploadSuccess={handleUploadSuccess} onError={setError} />
 
-        {/* Search bar */}
-        <div className="search-bar">
-          <span className="search-icon">⌕</span>
+        {/* Search */}
+        <div className="search-wrap">
+          <span className="search-icon-left">🔍</span>
           <input
             type="text"
-            placeholder="Search files…"
+            placeholder="Search files by name…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
           />
           {search && (
-            <button className="search-clear" onClick={() => setSearch("")}>
-              ✕
-            </button>
+            <button className="search-clear" onClick={() => setSearch("")}>✕</button>
           )}
         </div>
 
-        {/* File grid / states */}
+        {/* File list */}
+        {files.length > 0 && !loading && (
+          <p className="section-label">
+            {search ? `Results for "${search}"` : "All files"}
+          </p>
+        )}
+
         {loading ? (
           <div className="state-box">
-            <span className="spinner" style={{ width: 28, height: 28 }} />
-            <p>Loading vault…</p>
+            <span className="spinner" style={{ width: 24, height: 24 }} />
+            <p>Loading your files…</p>
           </div>
         ) : files.length === 0 ? (
           <div className="state-box fade-in">
-            <span className="state-icon">🗄️</span>
-            <p>{search ? `No files match "${search}"` : "Your vault is empty — upload something!"}</p>
+            <span className="state-icon">📂</span>
+            <p>
+              {search
+                ? `No files match "${search}"`
+                : "No files yet — upload something to get started"}
+            </p>
           </div>
         ) : (
           <div className="file-grid fade-in">

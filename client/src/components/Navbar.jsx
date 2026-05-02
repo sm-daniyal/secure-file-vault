@@ -1,6 +1,4 @@
-// ============================================================
-// components/Navbar.jsx — Top navigation bar
-// ============================================================
+// components/Navbar.jsx — v2 Corporate Clean
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -18,20 +16,18 @@ const Navbar = ({ username }) => {
   return (
     <nav className="navbar">
       <div className="container navbar-inner">
-        {/* Logo */}
         <div className="nav-brand">
-          <span className="nav-logo">⬡</span>
-          <span className="nav-title">SECURE VAULT</span>
+          <div className="nav-logo-box">🔒</div>
+          <span className="nav-title">Secure File Vault</span>
         </div>
 
-        {/* Right side */}
         <div className="nav-right">
           <span className="nav-user">
-            <span className="nav-dot" />
+            <span className="nav-online" />
             {username}
           </span>
           <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
-            Logout
+            Sign out
           </button>
         </div>
       </div>
